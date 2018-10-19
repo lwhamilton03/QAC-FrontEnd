@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NavBarFeatures from './containers/NavBarFeatures';
 
 import {
   BrowserRouter as Router,
@@ -44,16 +45,13 @@ class App extends Component {
       userHasAuthenticated: this.userHasAuthenticated
     };
 
-
-
-   
     return (
       <Router>
         <div className="App">
           
-          
-          
           <Route path="/" component={LoginPage} />
+          <Route path="/Dashboard" component={LoginPage} />
+
 
         </div>
       </Router>
