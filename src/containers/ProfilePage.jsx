@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+
 import { Table } from "react-bootstrap";
 
-class TraineeTable extends Component {
+class ProfilePage extends Component {
   constructor(props) {
     super(props);
 
@@ -32,26 +33,39 @@ class TraineeTable extends Component {
     return (
       <Table bordered striped hover condensed>
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>CVs</th>
-            <th>Status</th>
-            <th>Flag</th>
-          </tr>
+          <th>PROFILE</th>
         </thead>
         <tbody>
           {this.state.allPeople
-            .filter(item => item.role === "trainee" || item.role === "Trainee")
+            .filter(item => item.id === "5bc9a4dfce73b70888837fdf")
             .map(function(item, key) {
               return (
-                <tr key={key}>
-                  <td>{item.name}</td>
-                  <td>{item.email}</td>
-                  <td>{item.cv}</td>
-                  <td>{item.state}</td>
-                  <td>Flag Button</td>
-                </tr>
+                <div>
+                  <tr key={key}>
+                    <td>Image</td>
+                  </tr>
+                  <tr key={key}>
+                    <td>{item.name}</td>
+                  </tr>
+                  <tr key={key}>
+                    <td>{item.email}</td>
+                  </tr>
+                  <tr key={key}>
+                    <td />
+                  </tr>
+                  <tr key={key}>
+                    <td />
+                  </tr>
+                  <tr key={key}>
+                    <td />
+                  </tr>
+                  <tr key={key}>
+                    <td />
+                  </tr>
+                  <tr key={key}>
+                    <td />
+                  </tr>
+                </div>
               );
             })}
         </tbody>
@@ -60,4 +74,4 @@ class TraineeTable extends Component {
   }
 }
 
-export default TraineeTable;
+export default ProfilePage;
