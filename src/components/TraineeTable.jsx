@@ -50,7 +50,12 @@ class TraineeTable extends Component {
                   <td>{item.email}</td>
                   <td>{item.cv}</td>
                   <td>{item.state}</td>
-                  <td>Flag Button</td>
+                  <td>
+                    <button className="button">
+                      flag
+                      <img src="" />
+                    </button>
+                  </td>
                 </tr>
               );
             })}

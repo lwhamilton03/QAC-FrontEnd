@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Table } from "react-bootstrap";
+import { Table, Image } from "react-bootstrap";
 
 class ProfilePage extends Component {
   constructor(props) {
@@ -42,7 +42,16 @@ class ProfilePage extends Component {
               return (
                 <div>
                   <tr key={key}>
-                    <td>Image</td>
+                    <td width="12.5%">
+                      <div>
+                        <img
+                          src="https://powertestdyno.com/wp-content/uploads/sites/2/2015/12/headshot-placeholder.png"
+                          class="img-rounded"
+                          height="12%"
+                          width="12%"
+                        />
+                      </div>
+                    </td>
                   </tr>
                   <tr key={key}>
                     <td>{item.name}</td>
@@ -51,19 +60,16 @@ class ProfilePage extends Component {
                     <td>{item.email}</td>
                   </tr>
                   <tr key={key}>
-                    <td />
+                    <td Preferred Job />
                   </tr>
                   <tr key={key}>
-                    <td />
+                    <td Preferred Location />
                   </tr>
                   <tr key={key}>
-                    <td />
+                    <td Trainer Contact Details />
                   </tr>
                   <tr key={key}>
-                    <td />
-                  </tr>
-                  <tr key={key}>
-                    <td />
+                    <td Edit Profile />
                   </tr>
                 </div>
               );

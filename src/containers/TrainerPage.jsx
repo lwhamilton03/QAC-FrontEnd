@@ -37,7 +37,6 @@ class TrainerPage extends Component {
           <Row className="show-grid">
             <Col xs={6} md={4}>
               <code>
-                <h1> Profile Table </h1>
                 <ProfilePage />
               </code>
             </Col>
