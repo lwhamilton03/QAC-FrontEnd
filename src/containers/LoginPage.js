@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'mdbreact';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect  } from 'react-router-dom';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./LoginPage.css";
+import NavbarFeatures from './NavBarFeatures';
+import CryptoJS from 'cryptojs';
+
 
 class LoginPage extends Component {
     constructor(props) {
@@ -10,9 +13,27 @@ class LoginPage extends Component {
     
         this.state = {
           email: "",
-          password: ""
+          password: "",
+          redirectPath: "",
+          isAuthenticated: false
+
         };
     }
+  
+  userHasAuthenticated = authenticated => {
+    this.setState({ isAuthenticated: authenticated });
+  }
+
+  state = {
+    isLoading: true,
+    groups: []
+  };
+
+  async componentDidMount() {
+    const response = await fetch('/api/people');
+    const body = await response.json();
+    this.setState({ people: body, isLoading: false });
+  }
 
     validateForm() {
         return this.state.email.length > 0 && this.state.password.length > 0;
@@ -23,24 +44,30 @@ class LoginPage extends Component {
           [event.target.id]: event.target.value
         });
     }
+
+    handleClick(event){
+      var apiBaseUrl = "http://localhost:3000/api/login";
+      var self = this;
+      var payload={
+      "email":this.state.username,
+      "password":this.state.password
+      }
+    }
     
     handleSubmit = event => {
       event.preventDefault();
 
       var emailstr =  document.getElementById('email').value;
-      var passstr = document.getElementById('password').value;
+      var password = document.getElementById('password').value;
     
-      const url = "http://192.168.1.11:8090/api/login"
+      const url = "http://localhost:8090/api/login";
       
       var user = JSON.stringify({
           "email":emailstr,
-          "password":passstr
+          "password":password
       });
       
       console.log(user);
-      
-      
-        
       
       try {
 
@@ -53,9 +80,12 @@ class LoginPage extends Component {
         xhttp.send(user);
         xhttp.onload = ()=>{
           console.log(xhttp.responseText);
+          
+          this.setState({ redirectPath: xhttp.responseText });
+
         }
         
-        alert("Logged in");
+        // alert("Logged in");
       } catch (e) {
         alert(e.message);
       }
@@ -63,88 +93,61 @@ class LoginPage extends Component {
     }
 
     render() { 
+
+      const {people, isLoading} = this.state;
+
+      const childProps = {
+        isAuthenticated: this.state.isAuthenticated,
+        userHasAuthenticated: this.userHasAuthenticated
+      };
+
+      var redirectPath = this.state.redirectPath;
+      console.log(this.state);
+      console.log(redirectPath);
+      if (redirectPath === "Trainer") {
+        return <Redirect to="/Trainer" />;
+      }
+      if (redirectPath === "Trainee") {
+        return <Redirect to="/Trainee" />;
+      }
+
         return ( 
           <div className="MainPage">
 
-          <div class="p-3 mb-2 bg-dark text-white" className="NavBarMain">
-            <Router>
-                <Navbar light color="blue-grey lighten-5" expand="lg" scrolling>
-                    <NavbarBrand href="/">
-                        <strong>CV Wonder</strong>
-                    </NavbarBrand>
-                    { !this.state.isWideEnough && <NavbarToggler onClick = { this.onClick } />}
-                    <Collapse isOpen = { this.state.collapse } navbar>
-                        <NavbarNav left>
-                          <NavItem active>
-                              <NavLink to="/Dashboard">Dashboard</NavLink>
-                          </NavItem>
-                          
-                          
-                          {/* <NavItem>
-                            <Dropdown>
-                                <DropdownToggle nav caret>Dropdown</DropdownToggle>
-                                <DropdownMenu>
-                                    <DropdownItem href="#">Action</DropdownItem>
-                                    <DropdownItem href="#">Another Action</DropdownItem>
-                                    <DropdownItem href="#">Something else here</DropdownItem>
-                                    <DropdownItem href="#">Something else here</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                          </NavItem> */}
-                        </NavbarNav>
-                        <NavbarNav right>
-                          {/* <NavItem>
-                            <form className="form-inline md-form mt-0">
-                              <input className="form-control mr-sm-2 mb-0 text-white" type="text" placeholder="Search" aria-label="Search"/>
-                            </form>
-                          </NavItem> */}
-
-                          <NavItem>
-                              <NavLink to="/Contact">Contact</NavLink>
-                          </NavItem>
-
-                          <NavItem>
-                            <NavLink to="/Profile"> Profile </NavLink>
-                          </NavItem>
-
-                        </NavbarNav>
-                    </Collapse>
-                </Navbar>
-            </Router>
-          </div>
+          <NavbarFeatures class="p-3 mb-2 bg-dark text-white" className="NavBarMain1">
+          </NavbarFeatures>
           
-
-            <div className="Login">
-                <form onSubmit={this.handleSubmit}>
-                 <FormGroup controlId="email" bsSize="large">
-                    <ControlLabel>Email</ControlLabel>
-                    <FormControl
-                        autoFocus
-                         type="email"
-                         value={this.state.email}
-                         onChange={this.handleChange}
-                     />
-                </FormGroup>
-                     <FormGroup controlId="password" bsSize="large">
-                    <ControlLabel>Password</ControlLabel>
-                 <FormControl
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-            />
-          </FormGroup>
-          <Button
-            block
-            bsSize="large"
-            disabled={!this.validateForm()}
-            
-            type="submit"
-          >
-            Login
-          </Button>
-        </form>
-      </div>
+          <div className="Login">
+            <form onSubmit={this.handleSubmit}>
+              <FormGroup controlId="email" bsSize="large">
+                <ControlLabel>Email</ControlLabel>
+                <FormControl
+                  autoFocus
+                  type="email"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                  />
+              </FormGroup>
+        
+              <FormGroup controlId="password" bsSize="large">
+                <ControlLabel>Password</ControlLabel>
+                <FormControl
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                  type="password"
+                />
+              </FormGroup>
+              <Button
+                block
+                bsSize="large"
+                disabled={!this.validateForm()}
+                type="submit"
+              >
+              Login
+              </Button>
+            </form>
           </div>
+        </div>
          );
     }
 }
